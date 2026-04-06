@@ -91,17 +91,21 @@ function renderHome() {
   app.innerHTML = '';
   const node = template('tpl-home');
   const records = loadRecords();
-  const drafts = records.filter(r => r.status === 'esborrany').length;
-  const modified = records.filter(r => r.status === 'modificat').length;
-  const sent = records.filter(r => r.status === 'enviat').length;
-  node.getElementById('home-stats').textContent = `${drafts} esborranys · ${modified} modificats · ${sent} enviats`;
+const drafts = records.filter(r => r.status === 'esborrany').length;
+const modified = records.filter(r => r.status === 'modificat').length;
+const sent = records.filter(r => r.status === 'enviat').length;
+const pending = drafts + modified;
   node.querySelectorAll('.nav').forEach(btn => btn.addEventListener('click', () => {
     currentView = btn.dataset.view;
     editingId = null;
     currentStep = 'dades';
     render();
   }));
-  node.getElementById('btn-sync-pending').addEventListener('click', syncPending);
+setBadge(node.getElementById('btn-drafts'), pending);
+setBadge(node.getElementById('btn-sent'), sent);
+setBadge(node.getElementById('btn-sync-pending'), pending);
+
+node.getElementById('btn-sync-pending').addEventListener('click', syncPending);
 node.getElementById('btn-help').addEventListener('click', () => {
   showHelpModal();
 });
@@ -163,6 +167,19 @@ function actionButton(label, cls, onClick) {
   btn.textContent = label;
   btn.addEventListener('click', onClick);
   return btn;
+}
+function setBadge(el, value) {
+  if (!el) return;
+
+  const old = el.querySelector('.badge-counter');
+  if (old) old.remove();
+
+  if (!value) return;
+
+  const badge = document.createElement('span');
+  badge.className = 'badge-counter';
+  badge.textContent = String(value);
+  el.appendChild(badge);
 }
 function showSendingOverlay(message = 'Enviant dades…') {
   let overlay = document.getElementById('sendingOverlay');
