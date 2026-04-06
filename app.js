@@ -102,7 +102,7 @@ const pending = drafts + modified;
     render();
   }));
 setBadge(node.getElementById('btn-drafts'), pending);
-setBadge(node.getElementById('btn-sent'), sent);
+setBadge(node.getElementById('btn-sent'), sent, 'green');
 setBadge(node.getElementById('btn-sync-pending'), pending);
 
 node.getElementById('btn-sync-pending').addEventListener('click', syncPending);
@@ -168,7 +168,7 @@ function actionButton(label, cls, onClick) {
   btn.addEventListener('click', onClick);
   return btn;
 }
-function setBadge(el, value) {
+function setBadge(el, value, type = 'default') {
   if (!el) return;
 
   const old = el.querySelector('.badge-counter');
@@ -178,6 +178,11 @@ function setBadge(el, value) {
 
   const badge = document.createElement('span');
   badge.className = 'badge-counter';
+
+  if (type === 'green') {
+    badge.classList.add('green');
+  }
+
   badge.textContent = String(value);
   el.appendChild(badge);
 }
