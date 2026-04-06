@@ -28,16 +28,20 @@
   <template id="tpl-home">
     <section class="card stack-lg">
 <button class="primary nav big" data-view="new-record">Registrar ZOO</button>
+
 <div class="nav-row">
-  <button class="secondary nav" data-view="drafts">Editar ZOO</button>
-  <button class="secondary nav" data-view="sent">Enviats</button>
-  <button class="ghost nav" id="btn-sync-pending">Enviar Pendents</button>
+  <button class="secondary nav btn-with-badge" data-view="drafts" id="btn-drafts">
+    Editar ZOO
+  </button>
+  <button class="secondary nav btn-with-badge" data-view="sent" id="btn-sent">
+    Enviats
+  </button>
+  <button class="ghost nav btn-with-badge" id="btn-sync-pending">
+    Enviar Pendents
+  </button>
 </div>
 
-<button class="ghost" id="btn-help">Ajuda</button>
-      <div class="info-banner">
-        <strong>Estat:</strong> <span id="home-stats"></span>
-      </div>
+<button class="ghost btn-help-big" id="btn-help">Ajuda</button>
     </section>
   </template>
 
