@@ -1030,7 +1030,13 @@ function getSimulationLocalTime(dateStr, lat, lon) {
   const best = findLocalTimeForSolarAltitude(dateStr, lat, lon, targetAltitude);
   if (!best) return '';
 
-  return formatTimeParts(best.hours, best.minutes, best.seconds);
+  let totalMinutes = (best.hours * 60) + best.minutes + 2;
+  totalMinutes = Math.max(0, Math.min(totalMinutes, (23 * 60) + 59));
+
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+
+  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
 }
 
 function getReferenceEclipseMaxAltitude(lat, lon) {
