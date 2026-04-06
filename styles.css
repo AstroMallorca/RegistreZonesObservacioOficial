@@ -253,3 +253,7 @@ button,
   justify-content: center;
   box-shadow: 0 4px 10px rgba(0,0,0,.35);
 }
+.badge-counter.green {
+  background: #54d6a1;
+  color: #042016;
+}
