@@ -911,9 +911,17 @@ async function submitRecord(id, forceResend = false) {
   if (!record) return;
 
   const fileBase = `${slugify(record.data.municipality || 'municipi')}_${slugify(record.data.placeName || 'zoo')}_${record.data.obsDate || '2026-04-29'}_v${record.version}`;
-  const payload = {
+let exportStatus = 'enviat';
+
+if (forceResend) {
+  exportStatus = 'reenviat';
+} else if (record.status === 'modificat') {
+  exportStatus = 'actualitzat';
+}
+
+const payload = {
   fileBase,
-  record: { ...record, status: 'enviat' },
+  record: { ...record, status: exportStatus },
   exportedAt: new Date().toISOString()
 };
 
