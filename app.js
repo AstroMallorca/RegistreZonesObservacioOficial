@@ -451,12 +451,16 @@ btn.onclick = () => {
   ['placeName','municipality','address','registrar','latitude','longitude','notes'].forEach(key => {
     refs[key].addEventListener('input', () => {
       saveFormToRecord(refs, record, { silent: true, keepStatus: true });
+
       if (['latitude','longitude'].includes(key)) {
         recalcTargetTime(refs, record);
       }
-if (key === 'placeName') {
-  node.querySelector('#editor-title').textContent = refs.placeName.value.trim() || '';
-}
+
+      if (key === 'placeName') {
+        node.querySelector('#editor-title').textContent = refs.placeName.value.trim() || '';
+      }
+
+      refreshRequiredFieldErrors(refs, record);
       renderSummary(refs.summaryBox, record);
     });
   });
@@ -464,6 +468,7 @@ if (key === 'placeName') {
   refs.obsDate.addEventListener('change', () => {
     saveFormToRecord(refs, record, { silent: true, keepStatus: true });
     recalcTargetTime(refs, record);
+    refreshRequiredFieldErrors(refs, record);
     renderSummary(refs.summaryBox, record);
   });
 
@@ -576,12 +581,18 @@ refs.sendRecord.addEventListener('click', async (e) => {
 
   saveFormToRecord(refs, record, { keepStatus: true });
 
-  const missing = validateRequiredFields(record);
+  const missing = refreshRequiredFieldErrors(refs, record);
 
   if (missing.length) {
+    const firstMissing = refs[missing[0].key];
+    if (firstMissing) {
+      firstMissing.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      firstMissing.focus();
+    }
+
     alert(
       'Falten camps obligatoris:\n\n' +
-      missing.map(f => '• ' + f).join('\n')
+      missing.map(f => '• ' + f.label).join('\n')
     );
     return;
   }
@@ -864,13 +875,35 @@ function validateRequiredFields(record) {
   const data = record.data || {};
   const errors = [];
 
-  if (!data.placeName?.trim()) errors.push('Nom del lloc');
-  if (!data.municipality?.trim()) errors.push('Municipi');
-  if (!data.registrar?.trim()) errors.push('Persona que registra');
-  if (!data.latitude?.trim()) errors.push('Latitud');
-  if (!data.longitude?.trim()) errors.push('Longitud');
+  if (!data.placeName?.trim()) errors.push({ key: 'placeName', label: 'Nom del lloc' });
+  if (!data.municipality?.trim()) errors.push({ key: 'municipality', label: 'Municipi' });
+  if (!data.registrar?.trim()) errors.push({ key: 'registrar', label: 'Persona que registra' });
+  if (!data.latitude?.trim()) errors.push({ key: 'latitude', label: 'Latitud' });
+  if (!data.longitude?.trim()) errors.push({ key: 'longitude', label: 'Longitud' });
 
   return errors;
+}
+
+function setFieldError(input, hasError) {
+  if (!input) return;
+
+  input.classList.toggle('field-error', hasError);
+
+  const labelSpan = input.closest('label')?.querySelector('span');
+  if (labelSpan) {
+    labelSpan.classList.toggle('field-error-label', hasError);
+  }
+}
+
+function refreshRequiredFieldErrors(refs, record) {
+  const missing = validateRequiredFields(record);
+  const missingKeys = new Set(missing.map(x => x.key));
+
+  ['placeName', 'municipality', 'registrar', 'latitude', 'longitude'].forEach(key => {
+    setFieldError(refs[key], missingKeys.has(key));
+  });
+
+  return missing;
 }
 async function submitRecord(id, forceResend = false) {
   const record = getRecord(id);
