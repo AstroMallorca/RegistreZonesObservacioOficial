@@ -296,3 +296,7 @@ button,
   color: #fff;
   font-weight: 700;
 }
+.centered-input {
+  text-align: center;
+  font-weight: 600;
+}
