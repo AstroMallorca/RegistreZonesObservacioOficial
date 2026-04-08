@@ -257,3 +257,18 @@ button,
   background: #54d6a1;
   color: #042016;
 }
+.required-label::after {
+  content: " *";
+  color: #ff7b8a;
+  font-weight: 800;
+}
+
+.field-error {
+  border-color: rgba(255,123,138,.9) !important;
+  box-shadow: 0 0 0 3px rgba(255,123,138,.16);
+  background: rgba(255,123,138,.08) !important;
+}
+
+.field-error-label {
+  color: #ffb0b9 !important;
+}
