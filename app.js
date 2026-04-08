@@ -973,18 +973,21 @@ const payload = {
 
     if (result.error) throw new Error(result.error);
 
-    record.status = 'enviat';
-    if (!forceResend) {
-      record.sentVersions.push({
-        version: record.version,
-        sentAt: new Date().toISOString(),
-        mode: 'server'
-      });
-    }
-    upsertRecord(record);
-    currentView = 'sent';
-    render();
-    return result;
+record.status = 'enviat';
+if (!forceResend) {
+  record.sentVersions.push({
+    version: record.version,
+    sentAt: new Date().toISOString(),
+    mode: 'server'
+  });
+}
+upsertRecord(record);
+
+alert("Gràcies per la teva feina i col·laboració.\n\nLes dades s'han enviat correctament.");
+
+currentView = 'sent';
+render();
+return result;
   } catch (error) {
     hideSendingOverlay();
     alert(`No s'ha pogut enviar. El registre queda guardat localment.\n\n${error.message}`);
