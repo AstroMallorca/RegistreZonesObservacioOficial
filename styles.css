@@ -85,12 +85,31 @@ button:active, .file-btn:active { transform: translateY(1px); }
 .step-tab.active { background: rgba(125, 200, 255, .18); color: var(--text); border-color: rgba(125,200,255,.35); }
 .step-panel { display: none; }
 .step-panel.active { display: block; }
-.choice-group { display: flex; flex-wrap: wrap; gap: 8px; }
-.choice {
-  background: rgba(255,255,255,.06); color: var(--text); border: 1px solid rgba(255,255,255,.12);
-  padding: 10px 12px; border-radius: 999px;
+.choice-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
 }
-.choice.active { background: rgba(125,200,255,.2); border-color: rgba(125,200,255,.5); color: #fff; }
+@media (min-width: 600px) {
+  .choice-group {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.choice {
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,.12);
+  padding: 12px 10px;
+  border-radius: 12px; /* abans 999px */
+  text-align: center;
+  flex: 1;
+  min-width: 90px;
+.choice.active {
+  background: rgba(125,200,255,.25);
+  border-color: rgba(125,200,255,.7);
+  color: #fff;
+  font-weight: 700;
+}
 .row-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .footer-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 .footer-actions > * { flex: 1 1 180px; }
