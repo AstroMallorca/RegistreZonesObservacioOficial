@@ -319,3 +319,25 @@ button,
   text-align: center;
   font-weight: 600;
 }
+/* Grid només per blocs de visibilitat */
+.choice-group.choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+/* Botons més quadrats només aquí */
+.choice-group.choice-grid .choice {
+  border-radius: 12px;
+  text-align: center;
+  padding: 12px 10px;
+  flex: unset;
+  min-width: unset;
+}
+
+/* Actiu més visible */
+.choice-group.choice-grid .choice.active {
+  background: rgba(125,200,255,.25);
+  border-color: rgba(125,200,255,.7);
+  font-weight: 700;
+}
