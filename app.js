@@ -571,12 +571,24 @@ refs.documentInput.addEventListener('change', async e => {
     captureLocation(refs, record);
   });
 
-  refs.sendRecord.addEventListener('click', async (e) => {
-    e.preventDefault();
-    saveFormToRecord(refs, record, { keepStatus: true });
-    upsertRecord(record);
-    await submitRecord(record.id);
-  });
+refs.sendRecord.addEventListener('click', async (e) => {
+  e.preventDefault();
+
+  saveFormToRecord(refs, record, { keepStatus: true });
+
+  const missing = validateRequiredFields(record);
+
+  if (missing.length) {
+    alert(
+      'Falten camps obligatoris:\n\n' +
+      missing.map(f => '• ' + f).join('\n')
+    );
+    return;
+  }
+
+  upsertRecord(record);
+  await submitRecord(record.id);
+});
 
   editingId = record.id;
 }
@@ -848,7 +860,18 @@ function saveDraft(refs, record) {
   upsertRecord(record);
   alert('Registre guardat al dispositiu.');
 }
+function validateRequiredFields(record) {
+  const data = record.data || {};
+  const errors = [];
 
+  if (!data.placeName?.trim()) errors.push('Nom del lloc');
+  if (!data.municipality?.trim()) errors.push('Municipi');
+  if (!data.registrar?.trim()) errors.push('Persona que registra');
+  if (!data.latitude?.trim()) errors.push('Latitud');
+  if (!data.longitude?.trim()) errors.push('Longitud');
+
+  return errors;
+}
 async function submitRecord(id, forceResend = false) {
   const record = getRecord(id);
   if (!record) return;
