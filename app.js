@@ -851,16 +851,17 @@ async function captureLocation(refs, record) {
     alert('Aquest dispositiu no permet geolocalització des del navegador.');
     return;
   }
-  navigator.geolocation.getCurrentPosition(pos => {
-    refs.latitude.value = pos.coords.latitude.toFixed(6);
-    refs.longitude.value = pos.coords.longitude.toFixed(6);
-    record.data.latitude = refs.latitude.value;
-    record.data.longitude = refs.longitude.value;
-    markModified(record);
-    upsertRecord(record);
-    recalcTargetTime(refs, record);
-    renderSummary(refs.summaryBox, record);
-  }, err => {
+navigator.geolocation.getCurrentPosition(pos => {
+  refs.latitude.value = pos.coords.latitude.toFixed(6);
+  refs.longitude.value = pos.coords.longitude.toFixed(6);
+  record.data.latitude = refs.latitude.value;
+  record.data.longitude = refs.longitude.value;
+  markModified(record);
+  upsertRecord(record);
+  recalcTargetTime(refs, record);
+  refreshRequiredFieldErrors(refs, record);
+  renderSummary(refs.summaryBox, record);
+}, err => {
     alert(`No s'ha pogut obtenir la ubicació: ${err.message}`);
   }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 });
 }
