@@ -131,7 +131,12 @@ button:active, .file-btn:active { transform: translateY(1px); }
 .badge.bad { background: rgba(255,123,138,.15); color: #ffb0b9; }
 .info-banner, .countdown-box { padding: 12px 14px; border-radius: 16px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); }
 .slim-box { margin-bottom: 12px; }
-#countdown, #countdown-visibility { font-size: 1.25rem; font-weight: 800; letter-spacing: .03em; }
+#countdown, #countdown-visibility {
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: .02em;
+  line-height: 1.25;
+}
 .summary-grid { display: grid; gap: 10px; }
 .summary-item { border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.03); border-radius: 16px; padding: 12px 14px; }
 .summary-item strong { display: block; font-size: .84rem; color: var(--muted); }
@@ -340,4 +345,11 @@ button,
   background: rgba(125,200,255,.25);
   border-color: rgba(125,200,255,.7);
   font-weight: 700;
+}
+/* Llevar el quadre visual només a "Ubicació i moment" */
+.step-panel[data-panel="dades"] > .subcard.stack-sm {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 10px 0 0;
 }
