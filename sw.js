@@ -1,10 +1,5 @@
 const CACHE = 'zoo-registre-v2';
 const ASSETS = [
-  './',
-  './index.html',
-  './styles.css?v=2',
-  './app.js?v=2',
-  './manifest.webmanifest',
   './icons/icon-192.png',
   './icons/icon-512.png'
 ];
@@ -29,24 +24,29 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
+self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
 
   const url = new URL(event.request.url);
 
-  if (url.pathname.endsWith('/styles.css') || url.pathname.endsWith('/app.js')) {
+  const isAppShell =
+    url.pathname.endsWith('/') ||
+    url.pathname.endsWith('/index.html') ||
+    url.pathname.endsWith('/styles.css') ||
+    url.pathname.endsWith('/app.js') ||
+    url.pathname.endsWith('/manifest.webmanifest');
+
+  if (isAppShell) {
     event.respondWith(
-      fetch(event.request)
-        .then(response => {
-          const copy = response.clone();
-          caches.open(CACHE).then(cache => cache.put(event.request, copy));
-          return response;
-        })
-        .catch(() => caches.match(event.request))
+      fetch(event.request, { cache: 'no-store' })
     );
     return;
   }
 
   event.respondWith(
+    caches.match(event.request).then(cached => cached || fetch(event.request))
+  );
+});
     caches.match(event.request).then(cached => cached || fetch(event.request))
   );
 });
